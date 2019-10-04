@@ -17,7 +17,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r'/', MainHandler),
-            (r'/_proxy/telegram/', TelegramProxy),
+            (r'/_proxy/telegram/(.*)', TelegramProxy, {'end': '{0}'}),
         ]
         settings = dict(
             site_title=options.site_title,

@@ -9,6 +9,6 @@ class MainHandler(tornado.web.RequestHandler):
 class TelegramProxy(tornado.web.RedirectHandler):
     _url, _permanent = None, None
 
-    def initialize(self, *args):
-        self._url = 'https://api.telegram.org/bot'
+    def initialize(self, end, *args):
+        self._url = f'https://api.telegram.org/bot/{end}'
         self._permanent = False
