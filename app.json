@@ -1,0 +1,10 @@
+{
+  "name": "ifrag-notifier",
+  "description": "Simple Notifier",
+  "repository": "https://github.com/Piskuno00/tornado-notifier",
+  "keywords": ["python", "tornado"],
+  "success_url": "/",
+  "env": {
+      "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-python"
+  }
+}
