@@ -12,3 +12,6 @@ class TelegramProxy(tornado.web.RedirectHandler):
     def initialize(self, end, *args):
         self._url = f'https://api.telegram.org/bot/{end}'
         self._permanent = False
+
+    def check_xsrf_cookie(self):
+        return
