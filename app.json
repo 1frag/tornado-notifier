@@ -1,7 +1,7 @@
 {
   "name": "ifrag-notifier",
   "description": "Simple Notifier",
-  "repository": "https://github.com/Piskuno00/tornado-notifier",
+  "repository": "https://github.com/Piskunov00/tornado-notifier",
   "keywords": ["python", "tornado"],
   "success_url": "/",
   "env": {

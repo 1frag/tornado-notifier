@@ -15,7 +15,7 @@ define("port", default="8000", help="Listening port", type=str)
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("main.html")
+        self.render("index.html")
 
 
 class Application(tornado.web.Application):
