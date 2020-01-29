@@ -2,3 +2,4 @@ venv
 .idea
 __pycache__
 secrets.json
+vk_config.v2.json

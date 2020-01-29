@@ -8,26 +8,16 @@ logger = logging.getLogger(__name__)
 
 
 class TgBotActionsHandler:
-    update_id = None
+    update_id, item = None, None
 
-    def __init__(self, update_id):
-        self.update_id = update_id
+    def __init__(self, item_update_id):
+        self.item = item_update_id
+        self.update_id = self.item.get()
 
-    @property
-    def _proxy_url(self):
-        return 'https://ifrag-notifier.herokuapp.com/_proxy/telegram/'
-
-    async def execute(self):
-        bot = telegram.Bot(options.tg_token, base_url=self._proxy_url)
-        self.try_update_id(bot)
+    def execute(self):
+        bot = telegram.Bot(options.tg_token)
         self.echo(bot)
-        return self.update_id
-
-    def try_update_id(self, bot):
-        try:
-            self.update_id = bot.get_updates()[0].update_id
-        except IndexError:
-            self.update_id = None
+        self.item.set(self.update_id)
 
     def echo(self, bot):
         for update in bot.get_updates(offset=self.update_id, timeout=10):

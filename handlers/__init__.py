@@ -1,6 +1,6 @@
 from .simple import (
     MainHandler,
-    TelegramProxy,
+    SenderHandler,
 )
 
 from .telegram import TgBotActionsHandler

@@ -37,6 +37,9 @@ class Collector:
 
         definer('tg_token')
         definer('cookie_secret')
+        definer('dburl')
+        definer('EMAIL')
+        definer('PASSWORD')
 
     def def_kwargs(self, **kwargs):
         for key, value in kwargs.items():

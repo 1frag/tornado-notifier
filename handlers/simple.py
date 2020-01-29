@@ -1,4 +1,7 @@
 import tornado.web
+from tornado.options import options
+import vk_api
+import os
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -6,12 +9,26 @@ class MainHandler(tornado.web.RequestHandler):
         self.render("index.html")
 
 
-class TelegramProxy(tornado.web.RedirectHandler):
-    _url, _permanent = None, None
+class SenderHandler(tornado.web.RequestHandler):
+    def post(self):
+        text = self.get_argument('text')
+        url = self.get_argument('url')
+        user_id = url[url.index('=')+1:]
 
-    def initialize(self, end, *args):
-        self._url = f'https://api.telegram.org/bot/{end}'
-        self._permanent = False
+        vk_session = vk_api.VkApi(
+            options.EMAIL,
+            options.PASSWORD,
+            scope='messages',
+        )
+        vk_session.auth()
+        api = vk_session.get_api()
+        print(user_id, text)
+        api.messages.send(
+            message=text,
+            user_id=user_id,
+            peer_id=user_id,
+            random_id=user_id,
+        )
 
     def check_xsrf_cookie(self):
-        return
+        return True

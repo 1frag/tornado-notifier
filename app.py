@@ -4,8 +4,8 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
-from enum import Enum, auto
 from tornado.options import define, options
+from tornado_sqlalchemy import make_session_factory
 from utils import Collector, Item
 from handlers import *
 
@@ -14,12 +14,12 @@ item_update_id = None
 
 
 class Application(tornado.web.Application):
-    def __init__(self):
+    def __init__(self, **settings):
         handlers = [
             (r'/', MainHandler),
-            (r'/_proxy/telegram/(.*)', TelegramProxy, {'end': '{0}'}),
+            (r'/send/vk/', SenderHandler),
         ]
-        settings = dict(
+        settings.update(
             site_title=options.site_title,
             cookie_secret=options.cookie_secret,
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
@@ -29,9 +29,9 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
-    async def update_tg_bot_message(self):
+    def update_tg_bot_message(self):
         global item_update_id
-        await TgBotActionsHandler(item_update_id).execute()
+        TgBotActionsHandler(item_update_id).execute()
         return None
 
 
@@ -46,16 +46,18 @@ def main():
     print("Server listening on port " + str(options.port))
     logging.getLogger().setLevel(logging.DEBUG)
 
-    app = Application()
+    factory = make_session_factory(options.dburl)
+    app = Application(session_factory=factory)
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(options.port)
-
+    # im-send-btn im-chat-input--send _im_send im-send-btn_send
+    # im_chat-input--buttons
     loop = tornado.ioloop.IOLoop.instance()
-    period_cbk = tornado.ioloop.PeriodicCallback(
-        app.update_tg_bot_message,
-        10 * 1000,  # раз в 10 секунд
-    )
-    period_cbk.start()
+    # period_cbk = tornado.ioloop.PeriodicCallback(
+    #     app.update_tg_bot_message,
+    #     10 * 1000,  # раз в 10 секунд
+    # )
+    # period_cbk.start()
 
     loop.start()
 
